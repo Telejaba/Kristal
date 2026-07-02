@@ -103,7 +103,7 @@ function MainMenu:enter()
     end
 
     if not self.music:isPlaying() then
-        self.music:play("mod_menu", 1, 0.95)
+        self.music:play("mod_menu", 1, 1)
     end
 
     if #Kristal.Mods.failed_mods > 0 then
