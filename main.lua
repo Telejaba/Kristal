@@ -185,9 +185,23 @@ DarkMenu = require("src.engine.game.world.ui.dark.darkmenu")
 DarkItemMenu = require("src.engine.game.world.ui.dark.darkitemmenu")
 DarkEquipMenu = require("src.engine.game.world.ui.dark.darkequipmenu")
 DarkPowerMenu = require("src.engine.game.world.ui.dark.darkpowermenu")
-DarkConfigMenu = require("src.engine.game.world.ui.dark.darkconfigmenu")
 DarkMenuPartySelect = require("src.engine.game.world.ui.dark.darkmenupartyselect")
 DarkStorageMenu = require("src.engine.game.world.ui.dark.darkstoragemenu")
+
+-- Config menu
+
+-- States
+DarkConfigVolumeState = require("src.engine.game.world.ui.dark.config.darkconfigvolumestate")
+DarkConfigBorderState = require("src.engine.game.world.ui.dark.config.darkconfigborderstate")
+DarkConfigRebindState = require("src.engine.game.world.ui.dark.config.darkconfigrebindstate")
+
+-- Options
+DarkConfigOption = require("src.engine.game.world.ui.dark.config.options.darkconfigoption")
+DarkConfigBooleanOption = require("src.engine.game.world.ui.dark.config.options.darkconfigbooleanoption")
+DarkConfigVolumeOption = require("src.engine.game.world.ui.dark.config.options.darkconfigvolumeoption")
+DarkConfigBorderOption = require("src.engine.game.world.ui.dark.config.options.darkconfigborderoption")
+
+DarkConfigMenu = require("src.engine.game.world.ui.dark.darkconfigmenu")
 
 LightMenu = require("src.engine.game.world.ui.light.lightmenu")
 LightItemMenu = require("src.engine.game.world.ui.light.lightitemmenu")
