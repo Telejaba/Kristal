@@ -1921,11 +1921,18 @@ function Battle:commitSingleAction(action)
         anim = action.data:getSelectAnimation()
         local result = action.data:onSelect(battler, action.target)
         if result ~= false then
-            if action.tp then
+            if action.tp ~= nil then
+                local amount = action.tp
+
+                if Game:getConfig("newSpellCostCalculation") then
+                    -- Floor to 100 (if negative, ceil)
+                    amount = MathUtils.roundToZero(amount)
+                end
+
                 if action.tp > 0 then
-                    Game:giveTension(action.tp)
+                    Game:giveTension(amount)
                 elseif action.tp < 0 then
-                    Game:removeTension(-action.tp)
+                    Game:removeTension(-amount)
                 end
             end
             battler:setAnimation(anim)
@@ -3293,7 +3300,7 @@ function Battle:onKeyPressed(key)
         end
         if key == "k" then
             Game:setTension(Game:getMaxTension())
-            Assets.playSound("cardrive")
+            Assets.playSound("cardrive", 0.8, 1.4)
 
             if self.tension_bar ~= nil then
                 self.tension_bar:flash()
@@ -3632,34 +3639,32 @@ end
 function Battle:handleAttackingInput(key)
     if Input.isConfirm(key) then
         if not self.attack_done and not self.cancel_attack and #self.battle_ui.attack_boxes > 0 then
-            local closest
+            local closest = math.huge
             local closest_attacks = {}
 
             for _, attack in ipairs(self.battle_ui.attack_boxes) do
                 if not attack.attacked then
                     local close = attack:getClose()
-                    if not closest then
-                        closest = close
-                        table.insert(closest_attacks, attack)
-                    elseif close == closest then
-                        table.insert(closest_attacks, attack)
-                    elseif close < closest then
-                        closest = close
-                        closest_attacks = { attack }
+
+                    if close < 15 and close > -5 then
+                        if close == closest then
+                            table.insert(closest_attacks, attack)
+                        elseif close < closest then
+                            closest = close
+                            closest_attacks = { attack }
+                        end
                     end
                 end
             end
 
-            if closest and closest < 14.2 and closest > -2 then
-                for _, attack in ipairs(closest_attacks) do
-                    local points = attack:hit()
+            for _, attack in ipairs(closest_attacks) do
+                local points = attack:hit()
 
-                    local action = self:getActionBy(attack.battler, true)
-                    action.points = points
+                local action = self:getActionBy(attack.battler, true)
+                action.points = points
 
-                    if self:processAction(action) then
-                        self:finishAction(action)
-                    end
+                if self:processAction(action) then
+                    self:finishAction(action)
                 end
             end
         end
